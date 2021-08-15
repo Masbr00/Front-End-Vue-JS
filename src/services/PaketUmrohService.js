@@ -21,8 +21,8 @@ class PaketUmrohService {
         return http.delete(`/paketumroh/${slug}`)
     }
 
-    findByTitle(title) {
-        return http.get(`/paketumroh?title=${title}`);
+    findBySlug(slug) {
+        return http.get(`/paketumroh/${slug}`);
     }
 
     deleteAll() {

@@ -88,12 +88,12 @@
                 />
             </div>
 
-            <!-- <div class="form-group">
+            <div class="form-group">
                 <label for="image">Image</label>
-                <input type="file" class="form-control" name="image" id="image">
-            </div> -->
+                <input type="file" class="form-control" name="image" id="image" ref="image" v-on:change="handleFileUpload()">
+            </div>
 
-            <button @click="savePaketUmroh" class="btn btn-success">Submit</button>
+            <button @click="savePaketUmroh" class="btn btn-success mb-3">Submit</button>
         </div>
 
         <div v-else>
@@ -118,13 +118,17 @@ export default{
                 vendor_phone: null,
                 title: "",
                 content: "",
-                // image: null,
-                deleted: false
+                image: null,
+                deleted: false,
+                fileInfos: []
             },
             submited: false
         };
     },
     methods: {
+        handleFileUpload(){
+            this.selectedFiles = this.$refs.image;
+        },
         savePaketUmroh(){
             var data = {
                 vendor_id: this.paketumroh.vendor_id,
@@ -133,13 +137,14 @@ export default{
                 vendor_phone: this.paketumroh.vendor_phone,
                 title: this.paketumroh.title,
                 content: this.paketumroh.content,
-                // image: this.paketumroh.image
+                image: this.selectedFiles
             };
             
             PaketUmrohService.create(data)
             .then(response => {
                 this.paketumroh._id = response.data._id;
                 console.log(response.data);
+                console.log("berhasil")
                 this.submited = true;
             })
             .catch(e => {
