@@ -4,7 +4,13 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="search by slug" v-model="paketumroh.slug">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" @click="searchSlug">search</button>
+                    <div v-if="paketumroh.slug">
+                        <button class="btn btn-outline-secondary" type="button" @click="searchSlug">Search</button>
+                    </div>
+                    <div v-else>
+                        <button class="btn btn-outline-secondary" type="button" @click="retrievePaketUmroh">Search</button>
+                    </div>
+                    <button class="btn btn-outline-secondary ml-3" type="button" @click="refreshList">Refresh List</button>
                 </div>
             </div>
         </div>
@@ -31,11 +37,21 @@
                 <div>
                     <label><strong>Title</strong></label> {{ currentPaketUmroh.title }}
                 </div>
-                <div>
-                    <label><strong>Content</strong></label> {{ currentPaketUmroh.content }}
+                <div >
+                    <label><strong>Content `</strong></label>{{ currentPaketUmroh.content }}
                 </div>
                 <div>
                     <label><strong>Category</strong></label> {{ currentPaketUmroh.category.category }}
+                    <div v-if="!toggleCategory">
+                        <label for="Daftar paket yang sesuai:"></label>
+                        <ul>
+                            <li v-for="(paket, index) in currentPaketUmroh.category.daftar_paket" :key="index">
+                                Nama paket : {{paket.title}} <br>
+                                Slug       : {{paket.slug}} <br>
+                                Category   : {{paket.category.category}}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div>
                     <label><strong>Price</strong></label> {{ currentPaketUmroh.price }}
@@ -97,7 +113,6 @@
                         <table class="table table-responsive table-striped table-hover text-center table-bordered">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col">#</th>
                                     <th scope="col">Manasik Date</th>
                                     <th scope="col">Takeoff Date</th>
                                     <th scope="col">Home Date</th>
@@ -105,9 +120,6 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row">
-                                        Model
-                                    </th>
                                     <td>
                                         {{ currentPaketUmroh.schedule_umroh.manasik_date | formatDate }}
                                     </td>
@@ -127,23 +139,96 @@
                 </div>
 
                 <!-- Bagian Kamar -->
-                <!-- <div v-if="searchSlug">
+                <div>
                     <label><strong>Kamar</strong></label>
-                    <div>
+                    <div v-if="toggleKamar">
                         <table class="table table-striped table-hover text-center table-bordered">
                             <tbody>
                                 <tr>
                                     <th>
                                         Room Type
                                     </th>
-                                    <td v-for="(room_type, n) in currentPaketUmroh.accommodate.kamar[0].type_kamar" :key="n">
+                                    <td v-for="(room_type) in currentPaketUmroh.accommodate.kamar[0].type_kamar" :key="room_type">
                                         {{room_type}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Quota
+                                    </th>
+                                    <td v-for="(kuota) in currentPaketUmroh.accommodate.kamar[0].kuota" :key="kuota">
+                                        {{kuota}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Price
+                                    </th>
+                                    <td v-for="(price) in currentPaketUmroh.accommodate.kamar[0].price" :key="price">
+                                        {{price}}
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div> -->
+                    <!-- searchSlug -->
+                    <div v-if="!toggleKamar">
+                        <table class="table table-striped table-hover text-center table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>
+                                        Room Name
+                                    </th>
+                                    <template v-for="room_name in currentPaketUmroh.accommodate.kamar.detail_kamar">
+                                            <td v-for="rooms in room_name" :key="rooms">
+                                                {{rooms.name}}
+                                            </td>
+                                    </template>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Available
+                                    </th>
+                                    <template v-for="room_name in currentPaketUmroh.accommodate.kamar.detail_kamar">
+                                            <td v-for="rooms in room_name" :key="rooms">
+                                                {{rooms.available}}
+                                            </td>
+                                    </template>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Room Type
+                                    </th>
+                                        <template v-for="room_type in currentPaketUmroh.accommodate.kamar.type_kamar">
+                                            <td v-for="rooms in room_type.length" :key="rooms">
+                                                {{room_type[rooms-1]}}
+                                            </td>
+                                        </template>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Quota
+                                    </th>
+                                        <template v-for="kuota in currentPaketUmroh.accommodate.kamar.kuota">
+                                            <td v-for="rooms in kuota.length" :key="rooms">
+                                                {{kuota[rooms-1]}}
+                                            </td>
+                                        </template>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Price
+                                    </th>
+                                        <template v-for="price in currentPaketUmroh.accommodate.kamar.price">
+                                            <td v-for="rooms in price.length" :key="rooms">
+                                                {{price[rooms-1]}}
+                                            </td>
+                                        </template>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
                 <div>
                     <label><strong>Image</strong></label>
@@ -193,6 +278,8 @@ export default {
             title: "",
             toggleVendor: false,
             toggleImg: false,
+            toggleCategory: true,
+            toggleKamar: true
         };
     },
     methods: {
@@ -209,6 +296,8 @@ export default {
 
         refreshList() {
             this.retrievePaketUmroh();
+            this.toggleKamar = true
+            this.toggleCategory = true
             this.currentPaketUmroh = null;
             this.currentIndex = -1
         },
@@ -219,6 +308,11 @@ export default {
         },
 
         searchSlug() {
+            this.toggleKamar = false
+            this.toggleCategory = false
+            if (!this.paketumroh.slug) {
+                this.retrievePaketUmroh()
+            }
             PaketUmrohService.findBySlug(this.paketumroh.slug)
                 .then(response => {
                 this.paketumroh = response.data;

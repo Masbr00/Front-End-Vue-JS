@@ -1,8 +1,8 @@
 import http from "../http-common";
 
 class PaketUmrohService {
-    getAll() {
-        return http.get("/paketumroh");
+    getAll(params) {
+        return http.get(`/paketumroh`, { params });
     }
 
     get(slug) {
