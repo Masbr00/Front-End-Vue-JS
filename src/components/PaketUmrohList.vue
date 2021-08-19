@@ -14,6 +14,31 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-12">
+            <div class="mb-3">
+                <label for="range">Total Items Per Page </label>
+                <div id="range">
+                    <table class="mb-3">
+                        <tr>
+                            <td>
+                                <input class="form-control form-range" type="range" min="1" max="30" step="1" v-model="pageSize" @change="handlePageSizeChange($event)" style="width: 148px">
+                            </td>
+                            <td>
+                                <input class="form-control-plaintext ml-3" type="number" v-model="pageSize" style="width: 40px" readonly/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <b-pagination
+                    v-model="page"
+                    :total-rows="count"
+                    :per-page="pageSize"
+                    prev-text="Prev"
+                    next-text="Next"
+                    @change="handlePageChange"
+                ></b-pagination>
+            </div>
+        </div>
         <div class="col-md-6">
             <h4>Daftar Paket Umroh</h4>
             <ul class="list-group">
@@ -41,14 +66,17 @@
                     <label><strong>Content `</strong></label>{{ currentPaketUmroh.content }}
                 </div>
                 <div>
-                    <label><strong>Category</strong></label> {{ currentPaketUmroh.category.category }}
+                    <div v-if="toggleCategory">
+                        <label><strong>Category</strong></label> {{ currentPaketUmroh.category.category }}
+                    </div>
                     <div v-if="!toggleCategory">
-                        <label for="Daftar paket yang sesuai:"></label>
+                        <label><strong>Category</strong></label>
                         <ul>
-                            <li v-for="(paket, index) in currentPaketUmroh.category.daftar_paket" :key="index">
-                                Nama paket : {{paket.title}} <br>
-                                Slug       : {{paket.slug}} <br>
-                                Category   : {{paket.category.category}}
+                            <li>
+                                Category   : {{currentPaketUmroh.category.category[0].category}}
+                            </li>
+                            <li>
+                                Deskripsi   : {{currentPaketUmroh.category.category[0].description}}
                             </li>
                         </ul>
                     </div>
@@ -139,7 +167,7 @@
                 </div>
 
                 <!-- Bagian Kamar -->
-                <div>
+                <!-- <div>
                     <label><strong>Kamar</strong></label>
                     <div v-if="toggleKamar">
                         <table class="table table-striped table-hover text-center table-bordered">
@@ -171,7 +199,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- searchSlug -->
+                    searchSlug
                     <div v-if="!toggleKamar">
                         <table class="table table-striped table-hover text-center table-bordered">
                             <tbody>
@@ -228,7 +256,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> -->
 
                 <div>
                     <label><strong>Image</strong></label>
@@ -279,14 +307,27 @@ export default {
             toggleVendor: false,
             toggleImg: false,
             toggleCategory: true,
-            toggleKamar: true
+            toggleKamar: true,
+
+            page : 1,
+            pageSize: 10,
+            count: 0
         };
     },
     methods: {
         retrievePaketUmroh() {
-            PaketUmrohService.getAll()
+            const params = this.getRequestParams(
+                this.page,
+                this.pageSize
+            )
+
+            PaketUmrohService.getAll(params)
             .then(response => {
-                this.paketumroh = response.data;
+                // this.paketumroh = response.data;
+                // const totalItems = response.data;
+                this.paketumroh = response.data
+                // const totalItems = Object.size(this.paketumroh);
+                this.count = 12
                 console.log(response.data);
             })
             .catch(e => {
@@ -333,6 +374,31 @@ export default {
                 .catch(e => {
                 console.log(e);
                 });
+        },
+
+        getRequestParams(page, pageSize) {
+            let params = {};
+
+            if (page) {
+                params["page"] = page
+            }
+
+            if (pageSize) {
+                params["limit"] = pageSize
+            }
+
+            return params;
+        },
+
+        handlePageChange(value) {
+            this.page = value;
+            this.retrievePaketUmroh();
+        },
+
+        handlePageSizeChange(event) {
+            this.pageSize = event.target.value;
+            this.page = 1;
+            this.retrievePaketUmroh();
         }
     },
     mounted(){
