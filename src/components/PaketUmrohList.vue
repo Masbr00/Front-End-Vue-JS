@@ -24,7 +24,7 @@
                                 <input class="form-control form-range" type="range" min="1" max="30" step="1" v-model="pageSize" @change="handlePageSizeChange($event)" style="width: 148px">
                             </td>
                             <td>
-                                <input class="form-control-plaintext ml-3" type="number" v-model="pageSize" style="width: 40px" readonly/>
+                                <input class="form-control-plaintext ml-3" type="number" v-model="pageSize" style="width: 40px" readonly disabled/>
                             </td>
                         </tr>
                     </table>
@@ -311,7 +311,7 @@ export default {
 
             page : 1,
             pageSize: 10,
-            count: 0
+            count: 0,
         };
     },
     methods: {
@@ -323,11 +323,9 @@ export default {
 
             PaketUmrohService.getAll(params)
             .then(response => {
-                // this.paketumroh = response.data;
-                // const totalItems = response.data;
                 this.paketumroh = response.data
-                // const totalItems = Object.size(this.paketumroh);
-                this.count = 12
+                const totalItems = response.data
+                this.count = totalItems.totalDoc
                 console.log(response.data);
             })
             .catch(e => {
