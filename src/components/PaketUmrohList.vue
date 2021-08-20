@@ -166,97 +166,84 @@
                     <label><strong>Maskapai</strong></label> {{ currentPaketUmroh.accommodate.maskapai }}
                 </div>
 
-                <!-- Bagian Kamar -->
-                <!-- <div>
-                    <label><strong>Kamar</strong></label>
-                    <div v-if="toggleKamar">
-                        <table class="table table-striped table-hover text-center table-bordered">
-                            <tbody>
-                                <tr>
-                                    <th>
-                                        Room Type
-                                    </th>
-                                    <td v-for="(room_type) in currentPaketUmroh.accommodate.kamar[0].type_kamar" :key="room_type">
-                                        {{room_type}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Quota
-                                    </th>
-                                    <td v-for="(kuota) in currentPaketUmroh.accommodate.kamar[0].kuota" :key="kuota">
-                                        {{kuota}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Price
-                                    </th>
-                                    <td v-for="(price) in currentPaketUmroh.accommodate.kamar[0].price" :key="price">
-                                        {{price}}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    searchSlug
-                    <div v-if="!toggleKamar">
-                        <table class="table table-striped table-hover text-center table-bordered">
-                            <tbody>
-                                <tr>
-                                    <th>
-                                        Room Name
-                                    </th>
-                                    <template v-for="room_name in currentPaketUmroh.accommodate.kamar.detail_kamar">
-                                            <td v-for="rooms in room_name" :key="rooms">
-                                                {{rooms.name}}
-                                            </td>
+                <div>
+                    <label><strong>Kamar</strong></label><br>
+                    <div class="table-responsive-sm">
+                        <table  class="table table-striped table-hover text-center table-bordered">
+                            <tr v-if="!toggleKamar">
+                                <th>
+                                    Room Name
+                                </th>
+                                <td v-for="(room_name,item) in currentPaketUmroh.accommodate.kamar" :key="item">
+                                    <template v-for="name in room_name.detail_kamar">
+                                        {{name[item].name}}
                                     </template>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Available
-                                    </th>
-                                    <template v-for="room_name in currentPaketUmroh.accommodate.kamar.detail_kamar">
-                                            <td v-for="rooms in room_name" :key="rooms">
-                                                {{rooms.available}}
-                                            </td>
+                                </td>
+                            </tr>
+                            <tr v-if="!toggleKamar">
+                                <th>
+                                    Available
+                                </th>
+                                <td v-for="(room_status,item) in currentPaketUmroh.accommodate.kamar" :key="item">
+                                    <template v-for="status in room_status.detail_kamar">
+                                        {{status[item].available}}
                                     </template>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Room Type
-                                    </th>
-                                        <template v-for="room_type in currentPaketUmroh.accommodate.kamar.type_kamar">
-                                            <td v-for="rooms in room_type.length" :key="rooms">
-                                                {{room_type[rooms-1]}}
-                                            </td>
-                                        </template>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Quota
-                                    </th>
-                                        <template v-for="kuota in currentPaketUmroh.accommodate.kamar.kuota">
-                                            <td v-for="rooms in kuota.length" :key="rooms">
-                                                {{kuota[rooms-1]}}
-                                            </td>
-                                        </template>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Price
-                                    </th>
-                                        <template v-for="price in currentPaketUmroh.accommodate.kamar.price">
-                                            <td v-for="rooms in price.length" :key="rooms">
-                                                {{price[rooms-1]}}
-                                            </td>
-                                        </template>
-                                </tr>
-                            </tbody>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Room Type
+                                </th>
+                                <td v-for="(type,item) in currentPaketUmroh.accommodate.kamar" :key="item">
+                                    {{type.type_kamar}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Quota
+                                </th>
+                                <td v-for="(kuota,item) in currentPaketUmroh.accommodate.kamar" :key="item">
+                                    {{kuota.kuota}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    price
+                                </th>
+                                <td v-for="(price,item) in currentPaketUmroh.accommodate.kamar" :key="item">
+                                    {{price.price}}
+                                </td>
+                            </tr>
                         </table>
+                        <!-- when searching with slug -->
+                        <!-- <table v-if="!toggleKamar" class="table table-striped table-hover text-center table-bordered">
+                            <tr>
+                                <th>
+                                    Room Type
+                                </th>
+                                <td v-for="(type,item) in currentPaketUmroh.accommodate.kamar" :key="item">
+                                    asdsf
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Quota
+                                </th>
+                                <td>
+                                    xcvxcv
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    price
+                                </th>
+                                <td>
+                                    bvnvb
+                                </td>
+                            </tr>
+                        </table> -->
                     </div>
-                </div> -->
+                </div>
 
                 <div>
                     <label><strong>Image</strong></label>
