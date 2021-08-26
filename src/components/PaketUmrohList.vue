@@ -174,9 +174,9 @@
                                 <th>
                                     Room Name
                                 </th>
-                                <td v-for="(room_name,item) in currentPaketUmroh.accommodate.kamar" :key="item">
-                                    <template v-for="name in room_name.detail_kamar">
-                                        {{name[item].name}}
+                                <td v-for="(room_name,item) in currentPaketUmroh.accommodate.datakamar" :key="item">
+                                    <template v-for="nama in room_name">
+                                        {{nama.name}}
                                     </template>
                                 </td>
                             </tr>
@@ -184,9 +184,9 @@
                                 <th>
                                     Available
                                 </th>
-                                <td v-for="(room_status,item) in currentPaketUmroh.accommodate.kamar" :key="item">
-                                    <template v-for="status in room_status.detail_kamar">
-                                        {{status[item].available}}
+                                <td v-for="(room_status,item) in currentPaketUmroh.accommodate.datakamar" :key="item">
+                                    <template v-for="status in room_status">
+                                        {{status.available}}
                                     </template>
                                 </td>
                             </tr>

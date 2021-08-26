@@ -90,7 +90,7 @@
 
             <div class="form-group">
                 <label for="image">Image</label>
-                <input type="file" class="form-control" name="image" id="image" ref="image" v-on:change="handleFileUpload()">
+                <input type="file" class="form-control" name="image" id="image" ref="image" @change="onSelect">
             </div>
 
             <button @click="savePaketUmroh" class="btn btn-success mb-3">Submit</button>
@@ -104,6 +104,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import PaketUmrohService from '../services/PaketUmrohService';
 
 export default{
@@ -118,18 +119,20 @@ export default{
                 vendor_phone: null,
                 title: "",
                 content: "",
-                image: null,
+                image: "",
                 deleted: false,
-                fileInfos: []
             },
             submited: false
         };
     },
     methods: {
-        handleFileUpload(){
-            this.selectedFiles = this.$refs.image;
+        onSelect() {
+            const img = this.$refs.image.files[0];
+            this.image = img
         },
         savePaketUmroh(){
+            const formData = new FormData();
+            formData.append('image', this.image);
             var data = {
                 vendor_id: this.paketumroh.vendor_id,
                 vendor_name: this.paketumroh.vendor_name,
@@ -137,8 +140,13 @@ export default{
                 vendor_phone: this.paketumroh.vendor_phone,
                 title: this.paketumroh.title,
                 content: this.paketumroh.content,
-                image: this.selectedFiles
+                image: formData
             };
+            try {
+                axios.post('/paketumroh', data)
+            } catch (error) {
+                console.log(error)
+            }
             
             PaketUmrohService.create(data)
             .then(response => {
