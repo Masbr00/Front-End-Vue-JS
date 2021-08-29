@@ -39,7 +39,98 @@
                 ></b-pagination>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-12 mb-3">
+            <button class="btn btn-secondary" v-on:click="filter= !filter">Filter</button>
+            <div class="row mt-1 py-3" v-if="filter">
+                <div class="row mb-3">
+                    <div class="col-2">
+                        <button class="btn btn-md btn-primary" v-on:click="filterTitle= !filterTitle">Title</button>
+                    </div>
+                    <div class="col" v-if="filterTitle">
+                        <input type="text" class="form-control" v-model="filteringTitle">
+                    </div>
+                    <div class="col" v-if="filterTitle">
+                        <button class="btn btn-md btn-outline-secondary" @click="cleartitle">Clear filter</button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-2">
+                        <button class="btn btn-md btn-primary" v-on:click="filterCat= !filterCat">Category</button>
+                    </div>
+                    <div class="col" v-if="filterCat">
+                        <input type="text" class="form-control" v-model="filteringCat">
+                    </div>
+                    <div class="col" v-if="filterCat">
+                        <button class="btn btn-md btn-outline-secondary" @click="clearcategory">Clear filter</button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-2">
+                        <button class="btn btn-md btn-primary" v-on:click="filterPaylater= !filterPaylater">Paylater</button>
+                    </div>
+                    <div class="col" v-if="filterPaylater">
+                        <div class="form-check form-check-inline pt-2">
+                            <input class="form-check-input" type="radio" id="inlineRadio1" v-model="filteringPaylater" value="true">
+                            <label class="form-check-label" for="inlineRadio1">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="inlineRadio2" v-model="filteringPaylater" value="false">
+                            <label class="form-check-label" for="inlineRadio2">No</label>
+                        </div>
+                    </div>
+                    <div class="col" v-if="filterPaylater">
+                        <button class="btn btn-md btn-outline-secondary" @click="clearpaylater">Clear filter</button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-2">
+                        <button class="btn btn-md btn-primary" v-on:click="filterStart_date= !filterStart_date">Start Date</button>
+                    </div>
+                    <div class="col pt-2" v-if="filterStart_date">
+                        <input type="date" class="form-control" v-model="filteringStart_date">
+                    </div>
+                    <div class="col pt-2" v-if="filterStart_date">
+                        <button class="btn btn-md btn-outline-secondary" @click="clearstart_date">Clear filter</button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-2">
+                        <button class="btn btn-md btn-primary" v-on:click="filterEnd_date= !filterEnd_date">End Date</button>
+                    </div>
+                    <div class="col" v-if="filterEnd_date">
+                        <input type="date" class="form-control" v-model="filteringEnd_date">
+                    </div>
+                    <div class="col" v-if="filterEnd_date">
+                        <button class="btn btn-md btn-outline-secondary" @click="clearend_date">Clear filter</button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-2">
+                        <button class="btn btn-md btn-primary" v-on:click="filterStart_price= !filterStart_price">Start Price</button>
+                    </div>
+                    <div class="col pt-2" v-if="filterStart_price">
+                        <input type="number" class="form-control" v-model="filteringStart_price">
+                    </div>
+                    <div class="col pt-2" v-if="filterStart_price">
+                        <button class="btn btn-md btn-outline-secondary" @click="clearstart_price">Clear filter</button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-2">
+                        <button class="btn btn-md btn-primary" v-on:click="filterEnd_price= !filterEnd_price">End Price</button>
+                    </div>
+                    <div class="col" v-if="filterEnd_price">
+                        <input type="number" class="form-control" v-model="filteringEnd_price" >
+                    </div>
+                    <div class="col" v-if="filterEnd_price">
+                        <button class="btn btn-md btn-outline-secondary" @click="clearend_price">Clear filter</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-md btn-success mb-3 ml-3" @click="refreshList" style="width: 87.66px">Submit Filter</button>
+            </div>
+        </div>
+        <div class="col-md-6 mb-5">
             <h4>Daftar Paket Umroh</h4>
             <ul class="list-group">
                 <li class="list-group-item"
@@ -51,9 +142,8 @@
                     {{ paketumroh.title }}
                 </li>
             </ul>
-
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 mb-3">
             <div v-if="currentPaketUmroh">
                 <h4>Paket Umroh</h4>
                 <div>
@@ -270,8 +360,9 @@
                     </div>
                 </div>
                 <br>
-                <a class="btn btn-warning px-4" :href="'/paketumroh/' + currentPaketUmroh.slug">Edit</a>
-                <button class="btn btn-danger ml-3" @click="removeSlug">Delete</button>
+                <!-- <a class="btn btn-warning px-4" :href="'/paketumroh/' + currentPaketUmroh.slug">Edit</a> -->
+                <!-- <button class="btn btn-danger ml-3" @click="removeSlug">Delete</button> -->
+                <button class="btn btn-danger" @click="removeSlug">Delete</button>
             </div>
             <div v-else>
                 <p>Please click on a Product...</p>
@@ -296,6 +387,22 @@ export default {
             toggleCategory: true,
             toggleKamar: true,
 
+            filter: false,
+            filterTitle: false,
+            filteringTitle: null,
+            filterCat: false,
+            filteringCat: null,
+            filterPaylater: false,
+            filteringPaylater: null,
+            filterStart_date: false,
+            filteringStart_date: null,
+            filterEnd_date: false,
+            filteringEnd_date: null,
+            filterStart_price: false,
+            filteringStart_price: null,
+            filterEnd_price: false,
+            filteringEnd_price: null,
+
             page : 1,
             pageSize: 10,
             count: 0,
@@ -305,7 +412,14 @@ export default {
         retrievePaketUmroh() {
             const params = this.getRequestParams(
                 this.page,
-                this.pageSize
+                this.pageSize,
+                this.filteringTitle,
+                this.filteringCat,
+                this.filteringPaylater,
+                this.filteringStart_date,
+                this.filteringEnd_date,
+                this.filteringStart_price,
+                this.filteringEnd_price
             )
 
             PaketUmrohService.getAll(params)
@@ -321,6 +435,7 @@ export default {
         },
 
         refreshList() {
+            this.page = 1
             this.retrievePaketUmroh();
             this.toggleKamar = true
             this.toggleCategory = true
@@ -361,7 +476,8 @@ export default {
                 });
         },
 
-        getRequestParams(page, pageSize) {
+        getRequestParams(page, pageSize, filteringTitle, filteringCat, filteringPaylater,
+        filteringStart_date, filteringEnd_date, filteringStart_price, filteringEnd_price) {
             let params = {};
 
             if (page) {
@@ -370,6 +486,40 @@ export default {
 
             if (pageSize) {
                 params["limit"] = pageSize
+            }
+
+            if (filteringTitle) {
+                params["title"] = filteringTitle
+            }
+
+            if (filteringCat) {
+                params["category"] = filteringCat
+            }
+
+            if (filteringPaylater) {
+                let x = null
+                if (filteringPaylater == "true") {
+                    x = true
+                }else {
+                    x= false
+                }
+                params["paylater"] = x
+            }
+
+            if (filteringStart_date) {
+                params["start_date"] = filteringStart_date
+            }
+
+            if (filteringEnd_date) {
+                params["end_date"] = filteringEnd_date
+            }
+
+            if (filteringStart_price) {
+                params["start_price"] = filteringStart_price
+            }
+
+            if (filteringEnd_price) {
+                params["end_price"] = filteringEnd_price
             }
 
             return params;
@@ -384,7 +534,35 @@ export default {
             this.pageSize = event.target.value;
             this.page = 1;
             this.retrievePaketUmroh();
-        }
+        },
+
+        cleartitle() {
+            this.filteringTitle = null
+        },
+
+        clearcategory() {
+            this.filteringCat = null
+        },
+
+        clearpaylater() {
+            this.filteringPaylater = null
+        },
+
+        clearstart_date() {
+            this.filteringStart_date = null
+        },
+
+        clearend_date() {
+            this.filteringEnd_date = null
+        },
+
+        clearstart_price() {
+            this.filteringStart_price = null
+        },
+
+        clearend_price() {
+            this.filteringEnd_price = null
+        },
     },
     mounted(){
         this.retrievePaketUmroh()
